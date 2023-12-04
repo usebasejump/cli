@@ -1,6 +1,6 @@
 {
   "name": "@usebasejump/cli",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Generate new basejump projects from the command line",
   "main": "build/index.js",
   "license": "MIT",
@@ -9,7 +9,8 @@
     "test": "jest"
   },
   "files": [
-    "build"
+    "build",
+    "templates"
   ],
   "bin": {
     "basejump": "./build/index.js"
@@ -17,9 +18,9 @@
   "dependencies": {
     "chalk": "4.1.2",
     "commander": "^10.0.0",
+    "generate-template-files": "^3.2.1",
     "got": "10.7.0",
-    "prompts": "^2.4.2",
-    "tar": "^6.1.13"
+    "prompts": "^2.4.2"
   },
   "devDependencies": {
     "@types/jest": "^29.2.5",
