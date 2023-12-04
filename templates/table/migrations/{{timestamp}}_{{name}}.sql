@@ -1,5 +1,5 @@
 
-CREATE TABLE IF NOT EXISTS public.__name__(camelCase)
+CREATE TABLE IF NOT EXISTS public.{{name}}
 (
     id uuid unique NOT NULL DEFAULT uuid_generate_v4() primary key,
     -- If your model is owned by an account, you want to make sure you have an account_id column
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS public.__name__(camelCase)
     account_id uuid not null references accounts(id),
 
     -- begin fields generated automatically from the template inputs
-    __templateInputs__
+    {{templateInputs}}(noCase)
     -- end fields generated automatically from the template inputs
 
     -- timestamps are useful for auditing
@@ -22,20 +22,20 @@ CREATE TABLE IF NOT EXISTS public.__name__(camelCase)
 
 
 -- protect the timestamps by setting created_at and updated_at to be read-only and managed by a trigger
-CREATE TRIGGER set___name___timestamp
-    BEFORE INSERT OR UPDATE ON public.__name__
+CREATE TRIGGER set_{{name}}_timestamp
+    BEFORE INSERT OR UPDATE ON public.{{name}}
     FOR EACH ROW
 EXECUTE PROCEDURE basejump.trigger_set_timestamps();
 
 -- protect the updated_by and created_by columns by setting them to be read-only and managed by a trigger
-CREATE TRIGGER set___name___user_tracking
-    BEFORE INSERT OR UPDATE ON public.__name__
+CREATE TRIGGER set_{{name}}_user_tracking
+    BEFORE INSERT OR UPDATE ON public.{{name}}
     FOR EACH ROW
 EXECUTE PROCEDURE basejump.trigger_set_user_tracking();
 
 
 -- enable RLS on the table
-ALTER TABLE public.__name__ ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.{{name}} ENABLE ROW LEVEL SECURITY;
 
 
 -- Because RLS is enabled, this table will NOT be accessible to any users by default
@@ -45,7 +45,7 @@ ALTER TABLE public.__name__ ENABLE ROW LEVEL SECURITY;
 ----------------
 -- Authenticated users should be able to read all records regardless of account
 ----------------
--- create policy "All logged in users can select" on public.__name__
+-- create policy "All logged in users can select" on public.{{name}}
 --     for select
 --     to authenticated
 --     using (true);
@@ -53,7 +53,7 @@ ALTER TABLE public.__name__ ENABLE ROW LEVEL SECURITY;
 ----------------
 -- Authenticated AND Anon users should be able to read all records regardless of account
 ----------------
--- create policy "All authenticated and anonymous users can select" on public.__name__
+-- create policy "All authenticated and anonymous users can select" on public.{{name}}
 --     for select
 --     to authenticated, anon
 --     using (true);
@@ -61,51 +61,51 @@ ALTER TABLE public.__name__ ENABLE ROW LEVEL SECURITY;
 -------------
 -- Users should be able to read records that are owned by an account they belong to
 --------------
--- create policy "Account members can select" on public.__name__
+-- create policy "Account members can select" on public.{{name}}
 --     for select
 --     to authenticated
 --     using (
---     (account_id IN ( SELECT basejump.get_accounts_for_current_user()))
+--     (account_id IN ( SELECT basejump.get_accounts_with_role()))
 --     );
 
 
 ----------------
 -- Users should be able to create records that are owned by an account they belong to
 ----------------
--- create policy "Account members can insert" on public.__name__
+-- create policy "Account members can insert" on public.{{name}}
 --     for insert
 --     to authenticated
 --     with check (
---     (account_id IN ( SELECT basejump.get_accounts_for_current_user()))
+--     (account_id IN ( SELECT basejump.get_accounts_with_role()))
 --     );
 
 ---------------
 -- Users should be able to update records that are owned by an account they belong to
 ---------------
--- create policy "Account members can update" on public.__name__
+-- create policy "Account members can update" on public.{{name}}
 --     for update
 --     to authenticated
 --     using (
---     (account_id IN ( SELECT basejump.get_accounts_for_current_user()))
+--     (account_id IN ( SELECT basejump.get_accounts_with_role()))
 --     );
 
 ----------------
 -- Users should be able to delete records that are owned by an account they belong to
 ----------------
--- create policy "Account members can delete" on public.__name__
+-- create policy "Account members can delete" on public.{{name}}
 --     for delete
 --     to authenticated
 --     using (
---     (account_id IN ( SELECT basejump.get_accounts_for_current_user()))
+--     (account_id IN ( SELECT basejump.get_accounts_with_role()))
 --     );
 
 ----------------
 -- Only account OWNERS should be able to delete records that are owned by an account they belong to
 ----------------
--- create policy "Account owners can delete" on public.__name__
+-- create policy "Account owners can delete" on public.{{name}}
 --     for delete
 --     to authenticated
 --     using (
---     (account_id IN ( SELECT basejump.get_accounts_for_current_user("owner")))
+--     (account_id IN ( SELECT basejump.get_accounts_with_role("owner")))
 --      );
 

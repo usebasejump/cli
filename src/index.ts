@@ -4,27 +4,22 @@ import {Command} from "commander";
 
 const program = new Command();
 
-import newProject from "./commands/new-project";
+import newProject from "./commands/init";
 import generate from "./commands/generate";
 
 /**
  * Create a new Basejump project
  */
+
 program
-    .command("new")
-    .alias("n")
-    .argument("<projectpath>", "Where should your new project be created")
-    .option(
-        "-r, --repo <projectrepo>",
-        "Specify which project you want to clone. Must be the TAR download URL of a GitHub repo",
-        "https://github.com/usebasejump/basejump/archive/main.tar.gz"
-    )
+    .command("init")
+    .alias("i")
+    .option("-p, --path <projectpath>", "Where should your new project be initialized", '.')
     .description("Generate a new Basejump project")
-    .action(async (projectPath, options) => {
+    .action(async (options) => {
         await newProject(
-            options.repo,
-            projectPath
-        );
+            options.path
+        );  
     });
 
 /**
@@ -33,10 +28,12 @@ program
 program
     .command("generate")
     .alias("g")
-    .argument("<template>", "The template you want to generate. Ex: 'model'")
+    .argument("<template>", "The template you want to generate. Ex: 'table'")
+    .argument("<templateName>", "The name of the template you want to generate. Ex: 'users'")
+    .argument("[templateinputs...]", "Any columns you want to pass to the template. Ex: 'name:string'")
     .description("Generate a new model off of a template")
-    .action(async (template) => {
-        await generate(template);
+    .action(async (template, templateName, templateInputs) => {
+        await generate(template, templateName, templateInputs);
     });
 
 program.parse();

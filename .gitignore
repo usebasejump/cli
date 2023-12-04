@@ -3,3 +3,5 @@ node_modules
 .vscode
 .envrc
 build
+.DS_Store
+supabase

@@ -1,9 +1,9 @@
 import {existsSync} from "fs";
+import path from "path";
 
-export default function(): boolean {
+export default function(pathName = "."): boolean {
     // make sure we're in a basejump project root
-    const supabaseConfigExists = existsSync("./supabase/config.toml");
-    // make sure supabase migrations folder exists
-    const supabaseMigrationsExists = existsSync("./supabase/migrations");
-    return supabaseConfigExists && supabaseMigrationsExists;
+    const filePath = path.join(pathName, "supabase", "config.toml");
+    const supabaseConfigExists = existsSync(filePath);        
+    return supabaseConfigExists;
 }
