@@ -65,32 +65,6 @@ export default async function (templateType: TEMPLATE_TYPES, templateName: strin
                     pathAndFileNameDefaultCase: CaseConverterEnum.SnakeCaseUnderscore,
                     overwrite: true
                 }
-            }, {
-                option: 'Generate table test',
-                defaultCase: CaseConverterEnum.PascalCase,
-                entry: {
-                    folderPath: path.join(__dirname, '../../templates/table/tests/'),
-                },
-                dynamicReplacers: [
-                    {
-                        slot: '__name__',
-                        slotValue: templateName,
-
-                    },
-                    {
-                        slot: '__timestamp__',
-                        slotValue: Date.now().toString(),
-                    },
-                    {
-                        slot: '__templateInputs__',
-                        slotValue: convertIntoColumns(templateInputs),
-                    }
-                ],
-                output: {
-                    path: path.join(process.cwd(), 'supabase', 'tests'),
-                    pathAndFileNameDefaultCase: CaseConverterEnum.CamelCase,
-                    overwrite: true
-                }
             }]);
             break;
         default:

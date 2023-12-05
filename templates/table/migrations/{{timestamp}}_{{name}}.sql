@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS public.{{name}}
     id uuid unique NOT NULL DEFAULT uuid_generate_v4() primary key,
     -- If your model is owned by an account, you want to make sure you have an account_id column
     -- referencing the account table. Make sure you also set permissions appropriately
-    account_id uuid not null references accounts(id),
+    account_id uuid not null references basejump.accounts(id),
 
     -- begin fields generated automatically from the template inputs
     {{templateInputs}}(noCase)
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS public.{{name}}
     -- Useful for tracking who made changes to a record
     -- Basejump has some convenience functions defined below for automatically handling these
     updated_by uuid references auth.users(id),
-    created_by uuid references auth.users(id),
+    created_by uuid references auth.users(id)
 );
 
 
