@@ -1,6 +1,6 @@
 {
   "name": "@usebasejump/cli",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Generate new basejump projects from the command line",
   "main": "build/index.js",
   "license": "MIT",
