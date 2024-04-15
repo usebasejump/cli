@@ -15,12 +15,6 @@ export default async (
     projectPath: string
 ) => {
 
-    const isSupabaseRoot = confirmSupabaseRoot(projectPath);
-    if (!isSupabaseRoot) {
-        logError("This command must be pointed at the root of a Basejump project.");
-        process.exit(1);
-    }
-
     // ask user for project defaults using prompts library
     const { teamAccounts, teamAccountBilling, personalAccountBilling, starterApp, enableTesting } = await prompts([
         {
@@ -32,19 +26,19 @@ export default async (
         {
             type: "confirm",
             name: "teamAccountBilling",
-            message: "Would you like to enable subscription billing for TEAM accounts? You can change this at any time",
+            message: "Enable billing for TEAM accounts? You can change this at any time",
             initial: true
         },
         {
             type: "confirm",
             name: "personalAccountBilling",
-            message: "Would you like to enable subscription billing for PERSONAL accounts? You can change this at any time",
+            message: "Enable billing for PERSONAL accounts? You can change this at any time",
             initial: false
         },
         {
             type: "confirm",
             name: "enableTesting",
-            message: "Do you want to enable testing for your project by installing supabase_test_helpers?",
+            message: "Enable pgTap and supabase_test_helpers for testing?",
             initial: true
         },
         {
@@ -75,8 +69,6 @@ export default async (
         process.exit(1)
     }
 
-    console.log(basejumpRepoInfo);
-
     const found = await hasRepo(basejumpRepoInfo)
 
     if (!found) {
@@ -89,6 +81,12 @@ export default async (
     logInfo(`Downloading Basejump core repo into ${root}`)
 
     await downloadAndExtractRepo(root, basejumpRepoInfo);
+
+    const isSupabaseRoot = confirmSupabaseRoot(projectPath);
+    if (!isSupabaseRoot) {
+        logError("This command must be pointed at the root of a Basejump project.");
+        process.exit(1);
+    }
 
 
     /**
@@ -132,7 +130,7 @@ export default async (
             dynamicReplacers: [
                 {
                     slot: '{{timestamp}}',
-                    slotValue: generateTimestamp(),
+                    slotValue: generateTimestamp(1),
                 },
             ],
             entry: {
